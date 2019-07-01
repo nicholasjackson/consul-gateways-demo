@@ -6,7 +6,8 @@ provider "helm" {
     cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.demo.kube_config.0.cluster_ca_certificate)
   }
 
-  install_tiller = true
+  install_tiller  = true
+  service_account = "tiller"
 }
 
 resource "helm_release" "consul" {
