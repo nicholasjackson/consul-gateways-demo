@@ -21,7 +21,9 @@ server = true
 bootstrap_expect = 3
 retry_join = ["provider=gce tag_value=server"]
 
-bind_addr = "$IP"
+bind_addr = "0.0.0.0"
+client_addr = "0.0.0.0"
+advertise_addr = "$IP"
 
 ui = true
 EOF
