@@ -5,24 +5,6 @@ resource "google_compute_instance_group_manager" "server" {
   base_instance_name = "server"
   zone               = "${var.instance-zone}"
   target_size        = "${var.instance-count}"
-  target_pools       = ["${google_compute_target_pool.server.self_link}"]
-}
-
-resource "google_compute_target_pool" "server" {
-  name = "server-target-pool"
-
-  health_checks = ["${google_compute_health_check.nomad.name}"]
-}
-
-// // A healthcheck that checks the Nomad http port.
-resource "google_compute_health_check" "nomad" {
-  name               = "nomad"
-  check_interval_sec = 1
-  timeout_sec        = 1
-
-  tcp_health_check {
-    port = "4646"
-  }
 }
 
 // The instance template for the Nomad servers.
