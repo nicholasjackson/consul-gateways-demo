@@ -10,7 +10,7 @@ resource "dnsimple_record" "grafana" {
   value  = module.k8s_azure.loadbalancer_grafana
 }
 
-resource "dnssimple_record" "google" {
+resource "dnsimple_record" "google" {
   domain  = "demo.gs"
   name    = "google"
   type    = "A"
