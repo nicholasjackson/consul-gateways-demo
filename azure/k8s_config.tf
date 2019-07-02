@@ -51,6 +51,7 @@ resource "kubernetes_cluster_role_binding" "tiller" {
     namespace = "kube-system"
   }
 }
+
 resource "kubernetes_service" "grafana" {
   depends_on = [helm_release.grafana, helm_release.prometheus]
   metadata {
