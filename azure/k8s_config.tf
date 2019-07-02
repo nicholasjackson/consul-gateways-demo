@@ -70,3 +70,26 @@ resource "kubernetes_service" "grafana" {
     type = "LoadBalancer"
   }
 }
+
+resource "kubernetes_service" "consul" {
+  depends_on = [helm_release.consul]
+
+  metadata {
+    name = "consul-lb"
+  }
+
+  spec {
+    selector = {
+      app       = "consul"
+      component = "server"
+      release   = "consul"
+    }
+
+    port {
+      port        = 80
+      target_port = 8500
+    }
+
+    type = "LoadBalancer"
+  }
+}

@@ -10,10 +10,18 @@ resource "dnsimple_record" "grafana" {
   value  = module.k8s_azure.loadbalancer_grafana
 }
 
+resource "dnsimple_record" "consul" {
+  domain = "demo.gs"
+  name   = "consul.azure"
+  type   = "A"
+  ttl    = 3600
+  value  = module.k8s_azure.loadbalancer_consul
+}
+
 resource "dnsimple_record" "google" {
-  domain  = "demo.gs"
-  name    = "google"
-  type    = "A"
-  ttl     = 3600
-  value   = module.nomad_gcp.loadbalancer_nomad
+  domain = "demo.gs"
+  name   = "google"
+  type   = "A"
+  ttl    = 3600
+  value  = module.nomad_gcp.loadbalancer_nomad
 }
