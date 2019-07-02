@@ -5,6 +5,13 @@ resource "google_compute_instance_group_manager" "server" {
   base_instance_name = "server"
   zone               = "${var.instance-zone}"
   target_size        = "${var.instance-count}"
+  target_pools       = ["${google_compute_target_pool.server.self_link}"]
+}
+
+resource "google_compute_target_pool" "server" {
+  name = "server-target-pool"
+
+  // health_checks = ["${google_compute_health_check.nomad.name}"]
 }
 
 // The instance template for the Nomad servers.
