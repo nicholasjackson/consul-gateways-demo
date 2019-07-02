@@ -9,4 +9,5 @@ variable "client_secret" {
 
 variable "gcp_project" {
   description = "GCP project to creat the nomad cluster in"
+  default     = "consul-gateways-demo"
 }
