@@ -51,3 +51,32 @@ resource "kubernetes_cluster_role_binding" "tiller" {
     namespace = "kube-system"
   }
 }
+
+# Load balancer for grafana
+resource "kubernetes_ingress" "ingress" {
+  metadata {
+    name = "ingress"
+  }
+
+  spec {
+    backend {
+      service_name = "grafana"
+      service_port = 80
+    }
+
+    rule {
+      http {
+        path {
+          backend {
+            service_name = "grafana"
+            service_port = 80
+          }
+
+          path = "/*"
+        }
+      }
+
+      host = "grafana.azure.demo.gs"
+    }
+  }
+}

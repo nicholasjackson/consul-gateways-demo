@@ -46,10 +46,14 @@ case "$1" in
     open_service 8180 80 consul-consul-ui http default
     ;;
   prometheus)
-    open_service 9090 9090 prometheus http default
+    open_service 9090 9090 prometheus-server http default
     ;;
   grafana)
-    open_service 3000 3000 grafana http default
+    open_service 3000 80 grafana http default
+    ;;
+  grafana-password)
+    echo "Grafana password:"
+    kubectl get secret --namespace default grafana -o jsonpath="{.data.admin-password}" | base64 --decode ; echo
     ;;
   ambassador-admin)
     open_service 8877 8877 ambassador-admin http default /ambassador/v0/diag/
