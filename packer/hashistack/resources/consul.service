@@ -1,0 +1,10 @@
+[Unit]
+Description=Consul
+Documentation=https://consul.io/docs/
+
+[Service]
+TimeoutStartSec=0
+ExecStart=/usr/bin/consul agent -config-dir=/etc/consul.d
+
+[Install]
+WantedBy=multi-user.target

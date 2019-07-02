@@ -4,3 +4,6 @@ terraform.tfstate
 terraform.tfstate.backup
 kube_config.yml
 .pid*
+
+packer/hashistack/resources/consul
+packer/hashistack/resources/envoy
