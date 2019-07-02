@@ -22,13 +22,11 @@ data "kubernetes_secret" "grafana" {
 }
 
 provider "grafana" {
-  url  = "http://grafana.${var.domain}"
-  auth = data.kubernetes_secret.grafana.data.admin-password
+  url  = "http://${kubernetes_service.grafana.load_balancer_ingress.0.ip}"
+  auth = "admin:${data.kubernetes_secret.grafana.data.admin-password}"
 }
 
 resource "grafana_data_source" "prometheus" {
-  depends_on = [helm_release.prometheus, helm_release.grafana]
-
   type = "prometheus"
   name = "prometheus-azure"
   url  = "http://prometheus-server:80/"
