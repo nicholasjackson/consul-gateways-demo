@@ -5,3 +5,7 @@ variable "client_id" {
 variable "client_secret" {
   description = "Azure service principal client secret used for kubernetes cluster"
 }
+
+variable "domain" {
+  description = "Domain name for services"
+}

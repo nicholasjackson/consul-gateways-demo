@@ -11,3 +11,8 @@ variable "gcp_project" {
   description = "GCP project to creat the nomad cluster in"
   default     = "consul-gateways-demo"
 }
+
+variable "domain" {
+  description = "DNSimple TLD"
+  default     = "demo.gs"
+}

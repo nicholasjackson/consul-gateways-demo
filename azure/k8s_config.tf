@@ -76,7 +76,8 @@ resource "kubernetes_ingress" "ingress" {
         }
       }
 
-      host = "grafana.azure.demo.gs"
+      host = "grafana.${var.domain}"
     }
   }
 }
+
