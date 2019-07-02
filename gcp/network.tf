@@ -6,7 +6,7 @@ resource "google_compute_region_backend_service" "nomad" {
   session_affinity = "CLIENT_IP"
 
   backend {
-    group = "${google_compute_instance_group_manager.server.instance_group}"
+    group = "${google_compute_instance_group_manager.nomad.instance_group}"
   }
 
   health_checks = ["${google_compute_health_check.nomad.self_link}"]
@@ -39,7 +39,7 @@ resource "google_compute_region_backend_service" "consul" {
   session_affinity = "CLIENT_IP"
 
   backend {
-    group = "${google_compute_instance_group_manager.server.instance_group}"
+    group = "${google_compute_instance_group_manager.consul.instance_group}"
   }
 
   health_checks = ["${google_compute_health_check.consul.self_link}"]
