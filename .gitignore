@@ -7,3 +7,4 @@ kube_config.yml
 
 packer/hashistack/resources/consul
 packer/hashistack/resources/envoy
+packer/hashistack/resources/postie

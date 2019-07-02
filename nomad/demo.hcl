@@ -1,5 +1,5 @@
 job "demo" {
-  datacenters = ["google"]
+  datacenters = ["dc1"]
 
   type = "service"
 
@@ -12,11 +12,12 @@ job "demo" {
   group "app" {
     count = 1
 
-    task "app" {
-      driver = "docker"
+    task "postie" {
+      driver = "exec"
 
       config {
-        image = "redis:3.2"
+        command = "postie"
+        
         port_map {
           http = 9090
         }
@@ -25,6 +26,7 @@ job "demo" {
       resources {
         cpu    = 500
         memory = 256
+
         network {
           mbits = 10
           port "http" {}
@@ -82,7 +84,7 @@ job "demo" {
               "sidecar_service": {
                 "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
                 "proxy": {
-                  "local_service_address": "{{ env "NOMAD_IP_cobol_http" }}"
+                  "local_service_address": "{{ env "NOMAD_IP_app_http" }}"
                 }
               }
             }

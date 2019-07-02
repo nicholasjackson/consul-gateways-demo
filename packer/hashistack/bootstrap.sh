@@ -8,6 +8,7 @@ unzip -o -d /usr/bin/ /tmp/nomad.zip
 # Copy additional files.
 cp /tmp/resources/envoy /usr/bin/envoy
 cp /tmp/resources/consul /usr/bin/consul
+cp /tmp/resources/consul /usr/bin/postie
 cp /tmp/resources/nomad.service /etc/systemd/system/nomad.service
 cp /tmp/resources/consul.service /etc/systemd/system/consul.service
 
