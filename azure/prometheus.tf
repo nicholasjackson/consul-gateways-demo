@@ -27,7 +27,8 @@ provider "grafana" {
 }
 
 resource "grafana_data_source" "prometheus" {
-  type = "prometheus"
-  name = "prometheus-azure"
-  url  = "http://prometheus-server:80/"
+  type       = "prometheus"
+  name       = "prometheus-azure"
+  url        = "http://prometheus-server:80/"
+  is_default = true
 }
