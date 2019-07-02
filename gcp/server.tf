@@ -8,16 +8,9 @@ resource "google_compute_instance_group_manager" "server" {
   target_pools       = ["${google_compute_target_pool.server.self_link}"]
 }
 
-resource "google_compute_forwarding_rule" "nomad" {
-  name       = "nomad-forwarding-rule"
+resource "google_compute_forwarding_rule" "server" {
+  name       = "server-forwarding-rule"
   target     = "${google_compute_target_pool.server.self_link}"
-  port_range = "4646"
-}
-
-resource "google_compute_forwarding_rule" "consul" {
-  name       = "consul-forwarding-rule"
-  target     = "${google_compute_target_pool.server.self_link}"
-  port_range = "8500"
 }
 
 resource "google_compute_target_pool" "server" {
