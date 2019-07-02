@@ -14,8 +14,9 @@ resource "helm_release" "grafana" {
   namespace = "default"
 }
 
-
 data "kubernetes_secret" "grafana" {
+  depends_on = [helm_release.grafana]
+
   metadata {
     name = "grafana"
   }
