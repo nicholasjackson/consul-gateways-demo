@@ -1,0 +1,73 @@
+#!/bin/bash
+UNAME=$(uname)
+
+# set specific commands for Linux and MacOS
+if [[ "$UNAME" == "Linux" ]]; then
+  OPEN=xdg-open
+  CLIP="| xclip -selection cls"
+else
+  OPEN=open
+  CLIP="| pbcopy"
+fi
+
+function get_k8s_config {
+  terraform refresh  > /dev/null
+  terraform output azure_k8s_config > kube_config.yml
+  export KUBECONFIG=$(pwd)/kube_config.yml
+}
+
+function get_service_token {
+  kubectl get secret `kubectl get serviceaccount my-dashboard-sa -o jsonpath="{.secrets[0].name}"` -o jsonpath="{.data.token}" | base64 --decode > .service_token
+
+  echo " "
+  echo "Service Token to access dashboard:"
+  cat .service_token
+  eval cat .service_token $CLIP
+  echo " "
+}
+
+function open_service {
+  kubectl port-forward --namespace=$5 --address 0.0.0.0 svc/$3 $1:$2 & echo $! > .pid_$3
+
+  echo " "
+	echo "Opening $3, To quit, press Ctrl-C"
+	sleep 5
+  eval $OPEN "$4://localhost:$1$6"
+	trap "pkill -F .pid_$3" SIGINT SIGTERM ERR EXIT; sleep 20000
+  echo " "
+}
+
+case "$1" in
+  dashboard)
+    get_service_token
+    open_service 8443 443 kubernetes-dashboard https kube-system
+    ;;
+  consul)
+    open_service 8180 80 consul-consul-ui http default
+    ;;
+  prometheus)
+    open_service 9090 9090 prometheus http default
+    ;;
+  grafana)
+    open_service 3000 3000 grafana http default
+    ;;
+  ambassador-admin)
+    open_service 8877 8877 ambassador-admin http default /ambassador/v0/diag/
+    ;;
+  ambassador-web)
+    open_service 8443 443 ambassador https default
+    ;;
+  get_k8s_config)
+    echo Fetching Kubernetes configuration
+    get_k8s_config
+    ;;
+  *)
+    echo "Usage:"
+    echo "dashboard        - Open the Kubernetes dashboard"
+    echo "consul           - Open the Consul UI"
+    echo "prometheus       - Open the Prometheus UI"
+    echo "grafana          - Open the Grafana UI"
+    echo "ambassador-admin - Open the Ambassador admin UI"
+    echo "get_k8s_config   - Fetch Kubernetes config from the remote state"
+    exit 1
+esac

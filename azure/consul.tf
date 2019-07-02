@@ -6,11 +6,13 @@ provider "helm" {
     cluster_ca_certificate = base64decode(azurerm_kubernetes_cluster.demo.kube_config.0.cluster_ca_certificate)
   }
 
-  install_tiller  = true
   service_account = "tiller"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.13.1"
 }
 
 resource "helm_release" "consul" {
+  depends_on = [kubernetes_cluster_role_binding.tiller]
+
   name      = "consul"
   chart     = "${path.module}/helm-charts/consul-helm"
   namespace = "default"

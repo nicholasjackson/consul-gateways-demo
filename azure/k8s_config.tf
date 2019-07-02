@@ -1,7 +1,5 @@
 provider "kubernetes" {
   host                   = "${azurerm_kubernetes_cluster.demo.kube_config.0.host}"
-  username               = "${azurerm_kubernetes_cluster.demo.kube_config.0.username}"
-  password               = "${azurerm_kubernetes_cluster.demo.kube_config.0.password}"
   client_certificate     = "${base64decode(azurerm_kubernetes_cluster.demo.kube_config.0.client_certificate)}"
   client_key             = "${base64decode(azurerm_kubernetes_cluster.demo.kube_config.0.client_key)}"
   cluster_ca_certificate = "${base64decode(azurerm_kubernetes_cluster.demo.kube_config.0.cluster_ca_certificate)}"
@@ -31,7 +29,8 @@ subjects:
 
 resource "kubernetes_service_account" "tiller" {
   metadata {
-    name = "tiller"
+    name      = "tiller"
+    namespace = "kube-system"
   }
 }
 
@@ -48,7 +47,7 @@ resource "kubernetes_cluster_role_binding" "tiller" {
 
   subject {
     kind      = "ServiceAccount"
-    name      = "default"
-    namespace = kubernetes_service_account.tiller.metadata[0].name
+    name      = kubernetes_service_account.tiller.metadata[0].name
+    namespace = "kube-system"
   }
 }
