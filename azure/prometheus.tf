@@ -31,7 +31,7 @@ resource "null_resource" "grafana_ready" {
   depends_on = [helm_release.grafana]
 
   provisioner "local-exec" {
-    command = "until curl -f -s ${kubernetes_service.grafana.load_balancer_ingress.0.ip}; do; sleep 1; done"
+    command = "until curl -f -s ${kubernetes_service.grafana.load_balancer_ingress.0.ip}; do sleep 1; done"
   }
 }
 
