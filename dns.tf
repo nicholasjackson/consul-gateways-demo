@@ -9,3 +9,11 @@ resource "dnsimple_record" "grafana" {
   ttl    = 3600
   value  = module.k8s_azure.loadbalancer_grafana
 }
+
+resource "dnssimple_record" "google" {
+  domain  = "demo.gs"
+  name    = "google"
+  type    = "A"
+  ttl     = 3600
+  value   = module.nomad_gcp.loadbalancer_nomad
+}
