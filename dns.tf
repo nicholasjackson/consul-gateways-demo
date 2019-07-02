@@ -7,5 +7,5 @@ resource "dnsimple_record" "grafana" {
   name   = "grafana.azure"
   type   = "A"
   ttl    = 3600
-  value  = module.k8s_azure.loadbalancer
+  value  = module.k8s_azure.loadbalancer_grafana
 }
