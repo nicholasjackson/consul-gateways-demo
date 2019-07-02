@@ -19,7 +19,7 @@ resource "helm_release" "consul" {
 
   set {
     name  = "global.image"
-    value = "consul:1.5.2"
+    value = "nicholasjackson/consul:beta"
   }
 
   set {
