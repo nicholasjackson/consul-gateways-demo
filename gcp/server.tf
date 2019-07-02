@@ -11,6 +11,7 @@ resource "google_compute_instance_group_manager" "server" {
 resource "google_compute_forwarding_rule" "server" {
   name       = "server-forwarding-rule"
   target     = "${google_compute_target_pool.server.self_link}"
+  port_range = "1-65535"
 }
 
 resource "google_compute_target_pool" "server" {
