@@ -1,4 +1,6 @@
 resource "kubernetes_deployment" "downstream" {
+  depends_on = [helm_release.consul]
+
   metadata {
     name = "downstream"
     labels = {
@@ -58,6 +60,8 @@ resource "kubernetes_deployment" "downstream" {
 }
 
 resource "kubernetes_deployment" "upstream" {
+  depends_on = [helm_release.consul]
+
   metadata {
     name = "upstream"
     labels = {
