@@ -93,7 +93,7 @@ resource "kubernetes_service" "consul" {
 
     port {
       name        = "api-api"
-      port        = 80
+      port        = 8500
       target_port = 8500
     }
 
