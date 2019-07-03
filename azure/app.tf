@@ -29,6 +29,7 @@ resource "kubernetes_deployment" "downstream" {
           "consul.hashicorp.com/connect-service-protocol"  = "http"
           "consul.hashicorp.com/connect-service-upstreams" = "upstream:9001"
           "prometheus.io/scrape" : "true"
+          "prometheus.io/port" : "9102"
         }
       }
 
@@ -90,6 +91,7 @@ resource "kubernetes_deployment" "upstream" {
           "consul.hashicorp.com/connect-inject"           = "true"
           "consul.hashicorp.com/connect-service-protocol" = "http"
           "prometheus.io/scrape" : "true"
+          "prometheus.io/port" : "9102"
         }
       }
 

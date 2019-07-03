@@ -46,7 +46,7 @@ case "$1" in
     open_service 8180 80 consul-consul-ui http default
     ;;
   prometheus)
-    open_service 9090 9090 prometheus-server http default
+    open_service 9090 80 prometheus-server http default
     ;;
   grafana)
     open_service 3000 80 grafana http default
