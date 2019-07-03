@@ -1,11 +1,7 @@
 {
   "variables": {
     "project_id": "",
-    "stack_version": "",
-    "consul_version": "",
-    "nomad_version": "",
-    "vault_version": "",
-    "terraform_version": ""
+    "stack_version": ""
   },
   "builders": [
     {
@@ -16,11 +12,6 @@
       "ssh_username" : "root",
       "image_name": "hashistack-{{ user `stack_version` | clean_image_name}}",
       "image_labels": {
-        "nomad": "{{ user `nomad_version` | clean_image_name }}",
-        "vault": "{{ user `vault_version` | clean_image_name }}",
-        "terraform": "{{ user `terraform_version` | clean_image_name }}",
-        "consul": "{{ user `consul_version` | clean_image_name }}",
-        "envoy": "{{ `1.9.1` | clean_image_name }}",
         "created": "{{ timestamp }}"
       }
     }
@@ -33,13 +24,7 @@
     },
     {
       "type": "shell",
-      "script": "bootstrap.sh",
-      "environment_vars": [
-        "NOMAD_VERSION={{ user `nomad_version` }}",
-        "VAULT_VERSION={{ user `vault_version` }}",
-        "TERRAFORM_VERSION={{ user `terraform_version` }}",
-        "CONSUL_VERSION={{ user `consul_version` }}"
-      ]
+      "script": "bootstrap.sh"
     }
   ]
 }

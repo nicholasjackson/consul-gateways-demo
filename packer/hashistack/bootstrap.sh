@@ -1,10 +1,6 @@
 #!/bin/bash
 set -e
 
-# Install Nomad
-curl -fsSL -o /tmp/nomad.zip https://releases.hashicorp.com/nomad/${NOMAD_VERSION}/nomad_${NOMAD_VERSION}_linux_amd64.zip
-unzip -o -d /usr/bin/ /tmp/nomad.zip
-
 # Copy additional files.
 cp /tmp/resources/envoy /usr/bin/envoy
 cp /tmp/resources/consul /usr/bin/consul
