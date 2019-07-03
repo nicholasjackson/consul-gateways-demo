@@ -58,17 +58,17 @@ resource "helm_release" "consul" {
   }
 
   set {
-    name  = "centralConfig.enabled"
+    name  = "connectInject.centralConfig.enabled"
     value = true
   }
 
   set {
-    name  = "centralConfig.defaultProtocol"
+    name  = "connectInject.centralConfig.defaultProtocol"
     value = "http"
   }
 
   set {
-    name  = "centralConfig.proxyDefaults"
+    name  = "connectInject.centralConfig.proxyDefaults"
     value = "\"{\\\"envoy_prometheus_bind_addr\\\": \\\"0.0.0.0:9102\\\"}\""
   }
 
