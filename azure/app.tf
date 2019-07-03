@@ -158,7 +158,7 @@ resource "kubernetes_deployment" "httperf" {
             "--server", "${kubernetes_service.downstream.load_balancer_ingress.0.ip}",
             "--port", "80",
             "--timeout", "1",
-            "--num-conns", "100",
+            "--num-conns", "100000",
             "--rate", "100",
           ]
 
