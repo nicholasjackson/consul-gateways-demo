@@ -12,6 +12,11 @@ job "demo" {
   group "upstream" {
     count = 1
 
+    constraint {
+      operator  = "distinct_hosts"
+      value     = "true"
+    }
+
     task "postie" {
       driver = "exec"
 
@@ -116,6 +121,11 @@ job "demo" {
 
   group "downstream" {
     count = 1
+
+    constraint {
+      operator  = "distinct_hosts"
+      value     = "true"
+    }
 
     task "postie" {
       driver = "exec"
