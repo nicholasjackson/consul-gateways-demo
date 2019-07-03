@@ -49,7 +49,7 @@ resource "kubernetes_deployment" "downstream" {
               memory = "512Mi"
             }
             requests {
-              cpu    = "250m"
+              cpu    = "0.1"
               memory = "50Mi"
             }
           }
@@ -109,7 +109,7 @@ resource "kubernetes_deployment" "upstream" {
               memory = "512Mi"
             }
             requests {
-              cpu    = "250m"
+              cpu    = "0.1"
               memory = "50Mi"
             }
           }

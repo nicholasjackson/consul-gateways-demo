@@ -53,7 +53,6 @@ resource "kubernetes_cluster_role_binding" "tiller" {
 }
 
 resource "kubernetes_service" "grafana" {
-  depends_on = [helm_release.grafana, helm_release.prometheus]
   metadata {
     name = "grafana-lb"
   }
@@ -72,8 +71,6 @@ resource "kubernetes_service" "grafana" {
 }
 
 resource "kubernetes_service" "consul" {
-  depends_on = [helm_release.consul]
-
   metadata {
     name = "consul-lb"
   }

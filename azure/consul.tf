@@ -29,12 +29,12 @@ resource "helm_release" "consul" {
 
   set {
     name  = "server.replicas"
-    value = 3
+    value = 1
   }
 
   set {
     name  = "server.bootstrapExpect"
-    value = 3
+    value = 1
   }
 
   set {
@@ -50,5 +50,10 @@ resource "helm_release" "consul" {
   set {
     name  = "centralConfig.enabled"
     value = true
+  }
+
+  set {
+    name  = "global.extraConfig"
+    value = "{'advertise_addr_wan': '${kubernetes_service.consul.load_balancer_ingress.0.ip}'}"
   }
 }
