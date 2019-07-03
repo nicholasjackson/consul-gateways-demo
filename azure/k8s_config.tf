@@ -90,6 +90,20 @@ resource "kubernetes_service" "consul" {
       target_port = 8500
     }
 
+    port {
+      name        = "serf-wan-tcp"
+      port        = 8302
+      target_port = 8302
+      protocol    = "TCP"
+    }
+
+    port {
+      name        = "serf-wan-udp"
+      port        = 8302
+      target_port = 8302
+      protocol    = "UDP"
+    }
+
     type = "LoadBalancer"
   }
 }

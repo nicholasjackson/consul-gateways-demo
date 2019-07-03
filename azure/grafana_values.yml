@@ -2,7 +2,12 @@ datasources:
   datasources.yaml:
     apiVersion: 1
     datasources:
-    - name: Prometheus
+    - name: Prometheus-Azure
+      type: prometheus
+      url: http://prometheus-server:80
+      access: proxy
+      isDefault: true
+    - name: Prometheus-GCP
       type: prometheus
       url: http://prometheus-server:80
       access: proxy
