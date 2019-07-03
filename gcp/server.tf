@@ -39,7 +39,7 @@ resource "google_compute_instance_template" "server" {
   }
 
   disk {
-    source_image = "${var.project}/hashistack-0-2-3"
+    source_image = "${var.project}/hashistack-0-2-4"
     auto_delete  = true
     boot         = true
   }

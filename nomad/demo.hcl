@@ -18,13 +18,9 @@ job "demo" {
       config {
         command = "postie"
         args = [
-          "--bind-address=0.0.0.0:9000",
+          "--bind-address=0.0.0.0:${NOMAD_PORT_http}",
           "--type=upstream"
         ]
-
-        port_map {
-          http = 9000
-        }
       }
 
       resources {
@@ -34,12 +30,6 @@ job "demo" {
         network {
           mbits = 10
           port "http" {}
-        }
-      }
-
-      service {
-        connect {
-          sidecar_service {}
         }
       }
     }
@@ -133,13 +123,9 @@ job "demo" {
       config {
         command = "postie"
         args = [
-          "--bind-address=0.0.0.0:9000",
-          "--upstream-uri=http://localhost:9001"
+          "--bind-address=0.0.0.0:${NOMAD_PORT_http}",
+          "--upstream-uri=http://localhost:${NOMAD_PORT_sidecar_upstream}"
         ]
-
-        port_map {
-          http = 9000
-        }
       }
 
       resources {
@@ -149,12 +135,6 @@ job "demo" {
         network {
           mbits = 10
           port "http" {}
-        }
-      }
-
-      service {
-        connect {
-          sidecar_service {}
         }
       }
     }
@@ -178,6 +158,7 @@ job "demo" {
       resources {
         network {
           port "ingress" {}
+          port "upstream" {}
           port "envoyadmin" {}
         }
       }
@@ -203,7 +184,7 @@ job "demo" {
         {
           "service": {
             "name": "downstream",
-            "ID": "postie-{{ env "NOMAD_ALLOC_ID" }}",
+            "ID": "downstream-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
             "connect": {
               "sidecar_service": {
@@ -212,7 +193,7 @@ job "demo" {
                   "local_service_address": "{{ env "NOMAD_IP_postie_http" }}",
                   "upstreams": [{
                     "destination_name": "upstream",
-                    "local_bind_port": 9001
+                    "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
                   }]
                 }
               }
