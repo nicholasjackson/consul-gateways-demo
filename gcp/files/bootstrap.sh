@@ -18,6 +18,8 @@ log_level = "DEBUG"
 data_dir = "/tmp/consul"
 datacenter = "google"
 
+enable_central_service_config = true
+
 server = true
 bootstrap_expect = 3
 retry_join = ["provider=gce tag_value=server"]
