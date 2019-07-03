@@ -19,6 +19,20 @@ data_dir = "/tmp/consul"
 datacenter = "google"
 
 enable_central_service_config = true
+config_entries {
+  bootstrap {
+    kind = "proxy-entries"
+    name = "global"
+
+    config {
+      envoy_prometheus_bind_addr = "0.0.0.0:9102"
+    }
+
+    MeshGateway {
+      Mode = "local"
+    }
+  }
+}
 
 server = true
 bootstrap_expect = 3
