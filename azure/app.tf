@@ -121,13 +121,13 @@ resource "kubernetes_deployment" "upstream" {
   }
 }
 
-resource "kubernetes_deployment" "ab" {
+resource "kubernetes_deployment" "httperf" {
   depends_on = [helm_release.consul]
 
   metadata {
-    name = "ab"
+    name = "httperf"
     labels = {
-      app = "ab"
+      app = "httperf"
     }
   }
 
@@ -136,28 +136,30 @@ resource "kubernetes_deployment" "ab" {
 
     selector {
       match_labels = {
-        app = "ab"
+        app = "httperf"
       }
     }
 
     template {
       metadata {
         labels = {
-          app     = "ab"
+          app     = "httperf"
           version = "v0.1.2"
         }
       }
 
       spec {
         container {
-          image = "jordi/ab"
-          name  = "bench"
+          image = "mshahbaz/httperf"
+          name  = "httperf"
 
           command = ["ab"]
           args = [
-            "-c", "1",
-            "-n", "1000",
-            "http://${kubernetes_service.downstream.load_balancer_ingress.0.ip}:80/"
+            "--server", "${kubernetes_service.downstream.load_balancer_ingress.0.ip}",
+            "--port", "80",
+            "--timeout", "1",
+            "--num-conns", "100",
+            "--rate", "100",
           ]
 
 
