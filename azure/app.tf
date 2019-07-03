@@ -28,6 +28,7 @@ resource "kubernetes_deployment" "downstream" {
           "consul.hashicorp.com/connect-inject"            = "true"
           "consul.hashicorp.com/connect-service-protocol"  = "http"
           "consul.hashicorp.com/connect-service-upstreams" = "upstream:9001"
+          "prometheus.io/scrape" : "true"
         }
       }
 
@@ -88,6 +89,7 @@ resource "kubernetes_deployment" "upstream" {
         annotations = {
           "consul.hashicorp.com/connect-inject"           = "true"
           "consul.hashicorp.com/connect-service-protocol" = "http"
+          "prometheus.io/scrape" : "true"
         }
       }
 
@@ -100,6 +102,62 @@ resource "kubernetes_deployment" "upstream" {
           args = [
             "--bind-address=localhost:9000",
             "--type=upstream",
+          ]
+
+
+          resources {
+            limits {
+              cpu    = "0.5"
+              memory = "512Mi"
+            }
+            requests {
+              cpu    = "0.1"
+              memory = "50Mi"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+resource "kubernetes_deployment" "ab" {
+  depends_on = [helm_release.consul]
+
+  metadata {
+    name = "ab"
+    labels = {
+      app = "ab"
+    }
+  }
+
+  spec {
+    replicas = 1
+
+    selector {
+      match_labels = {
+        app = "ab"
+      }
+    }
+
+    template {
+      metadata {
+        labels = {
+          app     = "ab"
+          version = "v0.1.2"
+        }
+      }
+
+      spec {
+        container {
+          image = "jordi/ab"
+          name  = "bench"
+
+          command = ["ab"]
+          args = [
+            "-c=1",
+            "-n=1000",
+            "http://${kubernetes_service.downstream.load_balancer_ingress.0.ip}:80/"
           ]
 
 
