@@ -44,6 +44,11 @@ resource "kubernetes_deployment" "downstream" {
             "--upstream-uri=http://localhost:9001"
           ]
 
+          port {
+            name           = "http"
+            container_port = 9000
+          }
+
 
           resources {
             limits {
@@ -105,6 +110,11 @@ resource "kubernetes_deployment" "upstream" {
             "--bind-address=localhost:9000",
             "--type=upstream",
           ]
+
+          port {
+            name           = "http"
+            container_port = 9000
+          }
 
 
           resources {
