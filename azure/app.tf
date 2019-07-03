@@ -150,10 +150,10 @@ resource "kubernetes_deployment" "httperf" {
 
       spec {
         container {
-          image = "mshahbaz/httperf"
+          image = "quay.io/alaska/httperf"
           name  = "httperf"
 
-          command = ["ab"]
+          command = ["httperf"]
           args = [
             "--server", "${kubernetes_service.downstream.load_balancer_ingress.0.ip}",
             "--port", "80",
