@@ -101,6 +101,13 @@ resource "kubernetes_service" "consul" {
       protocol    = "TCP"
     }
 
+    port {
+      name        = "consul-wan-rpc"
+      port        = 8300
+      target_port = 8300
+      protocol    = "TCP"
+    }
+
     type = "LoadBalancer"
   }
 }

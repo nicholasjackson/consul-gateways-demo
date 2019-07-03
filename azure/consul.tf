@@ -54,11 +54,16 @@ resource "helm_release" "consul" {
 
   set {
     name  = "server.extraConfig"
-    value = "{\"advertise_addr_wan\": \"${kubernetes_service.consul.load_balancer_ingress.0.ip}\"}"
+    value = "\"{\\\"advertise_addr_wan\\\": \\\"${kubernetes_service.consul.load_balancer_ingress.0.ip}\\\"}\""
   }
 
   set {
     name  = "centralConfig.proxyDefaults"
-    value = "{\"envoy_dogstatsd_url\": \"udp://127.0.0.1:9125\"}"
+    value = "\"{\\\"envoy_prometheus_bind_addr\\\": \\\"0.0.0.0:9102\\\"}\""
+  }
+
+  set {
+    name  = "connectInject.imageEnvoy"
+    value = "envoyproxy/envoy:v1.10.0"
   }
 }
