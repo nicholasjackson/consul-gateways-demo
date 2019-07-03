@@ -1,6 +1,10 @@
 #!/bin/bash
 set -e
 
+mkdir -p /opt/cni/bin
+curl -o /tmp/cni.tar.gz -L https://github.com/containernetworking/plugins/releases/download/v0.8.1/cni-plugins-linux-amd64-v0.8.1.tgz
+tar -xzf /tmp/cni.tar.gz -C /opt/cni/bin
+
 # Copy additional files.
 cp /tmp/resources/envoy /usr/bin/envoy
 cp /tmp/resources/nomad /usr/bin/nomad
