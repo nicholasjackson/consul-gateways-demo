@@ -53,7 +53,7 @@ resource "helm_release" "consul" {
   }
 
   set {
-    name  = "global.extraConfig"
+    name  = "server.extraConfig"
     value = "{'advertise_addr_wan': '${kubernetes_service.consul.load_balancer_ingress.0.ip}'}"
   }
 }
