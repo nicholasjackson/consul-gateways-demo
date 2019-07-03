@@ -18,7 +18,8 @@ resource "kubernetes_deployment" "downstream" {
     template {
       metadata {
         labels = {
-          app = "downstream"
+          app     = "downstream"
+          version = "v0.1"
         }
 
         annotations = {
@@ -76,7 +77,8 @@ resource "kubernetes_deployment" "upstream" {
     template {
       metadata {
         labels = {
-          app = "upstream"
+          app     = "upstream"
+          version = "v0.1"
         }
 
         annotations = {

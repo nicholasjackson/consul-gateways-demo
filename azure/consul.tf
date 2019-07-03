@@ -23,6 +23,11 @@ resource "helm_release" "consul" {
   }
 
   set {
+    name  = "global.datacenter"
+    value = "azure"
+  }
+
+  set {
     name  = "server.replicas"
     value = 3
   }
