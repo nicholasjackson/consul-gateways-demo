@@ -43,11 +43,27 @@ job "demo" {
         data = <<EOH
 ---
 scrape_configs:
-- job_name: 'metrics'
+- job_name: metrics
   scrape_interval: 10s
   consul_sd_configs:
   - server: {{ env "attr.unique.network.ip-address" }}:8500
-    services: []
+    services: ['metrics']
+  relabel_configs:
+  - source_labels: ['__meta_consul_service']
+    regex: 'nomad-client|nomad'
+    action: drop
+- job_name: nomad
+  scrape_interval: 10s
+  consul_sd_configs:
+  - server: {{ env "attr.unique.network.ip-address" }}:8500
+    services: ['nomad-client', 'nomad']
+  relabel_configs:
+  - source_labels: ['__meta_consul_tags']
+    regex: '(.*)http(.*)'
+    action: keep
+  metrics_path: /v1/metrics
+  params:
+    format: ['prometheus']
         EOH
         destination   = "local/prometheus.yml"
       }
