@@ -18,7 +18,7 @@ job "demo" {
       config {
         command = "postie"
         args = [
-          "--bind-address=0.0.0.0:${NOMAD_PORT_http}",
+          "--bind-address=127.0.0.1:${NOMAD_PORT_http}",
           "--type=upstream"
         ]
       }
@@ -42,7 +42,7 @@ job "demo" {
         args    = [
           "connect", "envoy",
           "-sidecar-for", "upstream-${NOMAD_ALLOC_ID}",
-          "-admin-bind", "${NOMAD_ADDR_envoyadmin}"
+          "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
         ]
       }
 
@@ -84,7 +84,7 @@ job "demo" {
               "sidecar_service": {
                 "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
                 "proxy": {
-                  "local_service_address": "{{ env "NOMAD_IP_postie_http" }}",
+                  "local_service_address": "127.0.0.1"
                 }
               }
             }
@@ -123,8 +123,8 @@ job "demo" {
       config {
         command = "postie"
         args = [
-          "--bind-address=0.0.0.0:${NOMAD_PORT_http}",
-          "--upstream-uri=http://localhost:${NOMAD_PORT_sidecar_upstream}"
+          "--bind-address=127.0.0.1:${NOMAD_PORT_http}",
+          "--upstream-uri=http://127.0.0.1:${NOMAD_PORT_sidecar_upstream}"
         ]
       }
 
@@ -147,7 +147,7 @@ job "demo" {
         args    = [
           "connect", "envoy",
           "-sidecar-for", "downstream-${NOMAD_ALLOC_ID}",
-          "-admin-bind", "${NOMAD_ADDR_envoyadmin}"
+          "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
         ]
       }
 
@@ -190,9 +190,10 @@ job "demo" {
               "sidecar_service": {
                 "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
                 "proxy": {
-                  "local_service_address": "{{ env "NOMAD_IP_postie_http" }}",
+                  "local_service_address": "127.0.0.1",
                   "upstreams": [{
                     "destination_name": "upstream",
+                    "local_bind_address": "127.0.0.1",
                     "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
                   }]
                 }
