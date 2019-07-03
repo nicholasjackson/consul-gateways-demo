@@ -9,6 +9,51 @@ job "demo" {
     healthy_deadline = "3m"
   }
 
+  group "monitoring" {
+    count = 1
+
+    task "prometheus" {
+      driver = "docker"
+
+      config {
+        image = "prom/prometheus:v2.10.0"
+        args = ["--config.file=/local/prometheus.yml"]
+
+        network_mode = "host"
+      }
+
+      resources {
+        cpu = 500
+        memory = 1024
+
+        network {
+          mbits = 10
+          port "http" {
+            static = "9090"
+          }
+        }
+      }
+
+      service {
+        name = "prometheus"
+        port = "http"
+      }
+
+      template {
+        data = <<EOH
+---
+scrape_configs:
+- job_name: 'metrics'
+  scrape_interval: 10s
+  consul_sd_configs:
+  - server: {{ env "attr.unique.network.ip-address" }}:8500
+    services: []
+        EOH
+        destination   = "local/prometheus.yml"
+      }
+    }
+  }
+
   group "upstream" {
     count = 1
 
@@ -59,6 +104,7 @@ job "demo" {
         network {
           port "ingress" {}
           port "envoyadmin" {}
+          port "metrics" {}
         }
       }
     }
@@ -81,7 +127,7 @@ job "demo" {
       template {
         data = <<EOH
         {
-          "service": {
+          "services": [{
             "name": "upstream",
             "ID": "upstream-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
@@ -89,11 +135,19 @@ job "demo" {
               "sidecar_service": {
                 "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
                 "proxy": {
-                  "local_service_address": "127.0.0.1"
+                  "local_service_address": "127.0.0.1",
+                  "config": {
+                    "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
+                  }
                 }
               }
             }
-          }
+          },
+          {
+            "name": "metrics",
+            "ID": "metrics-{{ env "NOMAD_ALLOC_ID" }}",
+            "port": {{ env "NOMAD_PORT_sidecar_metrics" }}
+          }]
         }
         EOH
         destination = "local/service.json"
@@ -170,6 +224,7 @@ job "demo" {
           port "ingress" {}
           port "upstream" {}
           port "envoyadmin" {}
+          port "metrics" {}
         }
       }
     }
@@ -192,7 +247,7 @@ job "demo" {
       template {
         data = <<EOH
         {
-          "service": {
+          "services": [{
             "name": "downstream",
             "ID": "downstream-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
@@ -201,6 +256,9 @@ job "demo" {
                 "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
                 "proxy": {
                   "local_service_address": "127.0.0.1",
+                  "config": {
+                    "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
+                  },
                   "upstreams": [{
                     "destination_name": "upstream",
                     "local_bind_address": "127.0.0.1",
@@ -209,7 +267,12 @@ job "demo" {
                 }
               }
             }
-          }
+          },
+          {
+            "name": "metrics",
+            "ID": "metrics-{{ env "NOMAD_ALLOC_ID" }}",
+            "port": {{ env "NOMAD_PORT_sidecar_metrics" }}
+          }]
         }
         EOH
         destination = "local/service.json"
