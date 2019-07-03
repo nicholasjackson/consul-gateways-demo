@@ -16,6 +16,7 @@ mkdir -p /etc/consul.d
 cat <<EOF > /etc/consul.d/server.hcl
 log_level = "DEBUG"
 data_dir = "/tmp/consul"
+datacenter = "google"
 
 server = true
 bootstrap_expect = 3
@@ -35,6 +36,7 @@ mkdir -p /etc/nomad.d
 cat <<EOF > /etc/nomad.d/server.hcl
 log_level = "DEBUG"
 data_dir = "/tmp/nomad"
+datacenter = "google"
 
 server {
   enabled = true
