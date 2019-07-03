@@ -155,8 +155,8 @@ resource "kubernetes_deployment" "ab" {
 
           command = ["ab"]
           args = [
-            "-c=1",
-            "-n=1000",
+            "-c", "1",
+            "-n", "1000",
             "http://${kubernetes_service.downstream.load_balancer_ingress.0.ip}:80/"
           ]
 
