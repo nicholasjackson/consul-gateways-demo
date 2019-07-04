@@ -1,4 +1,4 @@
-job "load-system" {
+job "load" {
     datacenters = ["google"]
 
     type = "system"
@@ -24,16 +24,18 @@ job "load-system" {
                 image = "quay.io/alaska/httperf"
                 command = "httperf"
                 args = [
-                    "--server", "${attr.unique.network.ip-address}",
+                    "--server", "localhost",
                     "--port", "9000",
                     "--timeout", "1",
                     "--num-conns", "100000",
                     "--rate", "100",
                 ]
+
+                network_mode = "host"
             }
 
             resources {
-                cpu = 500
+                cpu = 100
                 memory = 256
 
                 network {

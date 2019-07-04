@@ -9,7 +9,7 @@ job "demo-v2" {
     healthy_deadline = "3m"
   }
 
-  group "upstream" {
+  group "api" {
     count = 1
 
     constraint {
@@ -29,7 +29,7 @@ job "demo-v2" {
       }
 
       resources {
-        cpu    = 500
+        cpu    = 100
         memory = 256
 
         network {
@@ -46,7 +46,7 @@ job "demo-v2" {
         command = "consul"
         args    = [
           "connect", "envoy",
-          "-sidecar-for", "upstream-${NOMAD_ALLOC_ID}",
+          "-sidecar-for", "api-${NOMAD_ALLOC_ID}",
           "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
         ]
       }
@@ -83,8 +83,8 @@ job "demo-v2" {
         data = <<EOH
         {
           "services": [{
-            "name": "upstream",
-            "ID": "upstream-{{ env "NOMAD_ALLOC_ID" }}",
+            "name": "api",
+            "ID": "api-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
             "meta": {
               "version": "2"
@@ -95,6 +95,7 @@ job "demo-v2" {
                 "proxy": {
                   "local_service_address": "127.0.0.1",
                   "config": {
+                    "protocol": "http",
                     "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
                   }
                 }
@@ -131,7 +132,7 @@ job "demo-v2" {
     }
   }
 
-  group "downstream" {
+  group "web" {
     count = 1
 
     constraint {
@@ -151,12 +152,14 @@ job "demo-v2" {
       }
 
       resources {
-        cpu    = 500
+        cpu    = 100
         memory = 256
 
         network {
           mbits = 10
-          port "http" {}
+          port "http" {
+            static = 9000
+          }
         }
       }
     }
@@ -168,7 +171,7 @@ job "demo-v2" {
         command = "consul"
         args    = [
           "connect", "envoy",
-          "-sidecar-for", "downstream-${NOMAD_ALLOC_ID}",
+          "-sidecar-for", "web-${NOMAD_ALLOC_ID}",
           "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
         ]
       }
@@ -206,8 +209,8 @@ job "demo-v2" {
         data = <<EOH
         {
           "services": [{
-            "name": "downstream",
-            "ID": "downstream-{{ env "NOMAD_ALLOC_ID" }}",
+            "name": "web",
+            "ID": "web-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
             "meta": {
               "version": "2"
@@ -218,10 +221,11 @@ job "demo-v2" {
                 "proxy": {
                   "local_service_address": "127.0.0.1",
                   "config": {
+                    "protocol": "http",
                     "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
                   },
                   "upstreams": [{
-                    "destination_name": "upstream",
+                    "destination_name": "api",
                     "local_bind_address": "127.0.0.1",
                     "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
                   }]

@@ -23,7 +23,7 @@ job "monitoring" {
       }
 
       resources {
-        cpu = 500
+        cpu = 100
         memory = 1024
 
         network {

@@ -29,7 +29,7 @@ job "demo" {
       }
 
       resources {
-        cpu    = 500
+        cpu    = 100
         memory = 256
 
         network {
@@ -152,7 +152,7 @@ job "demo" {
       }
 
       resources {
-        cpu    = 500
+        cpu    = 100
         memory = 256
 
         network {
