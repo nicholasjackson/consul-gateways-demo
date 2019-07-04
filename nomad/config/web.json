@@ -1,0 +1,10 @@
+{
+    "Kind": "service-defaults",
+    "Name": "web",
+    "Protocol": "http",
+    "MeshGateway": {
+        "Mode": ""
+    },
+    "CreateIndex": 335,
+    "ModifyIndex": 335
+}

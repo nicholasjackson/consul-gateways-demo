@@ -44,7 +44,7 @@ job "monitoring" {
 ---
 scrape_configs:
 - job_name: metrics
-  scrape_interval: 10s
+  scrape_interval: 1s
   consul_sd_configs:
   - server: {{ env "attr.unique.network.ip-address" }}:8500
     services: ['metrics']

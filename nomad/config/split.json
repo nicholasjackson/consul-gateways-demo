@@ -1,0 +1,18 @@
+{
+    "Kind": "service-splitter",
+    "Name": "api",
+    "Splits": [
+        {
+            "Weight": 100,
+            "Service": "api",
+            "ServiceSubset": "v1"
+        },
+        {
+            "Weight": 0,
+            "Service": "api",
+            "ServiceSubset": "v2"
+        }
+    ],
+    "CreateIndex": 558,
+    "ModifyIndex": 1838
+}

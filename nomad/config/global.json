@@ -1,0 +1,13 @@
+{
+    "Kind": "proxy-defaults",
+    "Name": "global",
+    "Config": {
+        "envoy_prometheus_bind_addr": "0.0.0.0:9102",
+        "envoy_stats_flush_interval": "0.25s"
+    },
+    "MeshGateway": {
+        "Mode": "local"
+    },
+    "CreateIndex": 4,
+    "ModifyIndex": 2008
+}
