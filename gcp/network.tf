@@ -113,3 +113,14 @@ resource "google_compute_global_forwarding_rule" "frontend" {
   port_range = "80"
   ip_address = "${google_compute_global_address.frontend.address}"
 }
+
+resource "google_compute_address" "gateway" {
+  name = "gateway-ip"
+}
+
+resource "google_compute_forwarding_rule" "gateway" {
+  name       = "gateway"
+  target     = "${google_compute_target_pool.gateway.self_link}"
+  port_range = "1-65535"
+  ip_address = "${google_compute_address.gateway.address}"
+}
