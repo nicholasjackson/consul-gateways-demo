@@ -14,7 +14,7 @@ resource "helm_release" "consul" {
   depends_on = [kubernetes_cluster_role_binding.tiller]
 
   name      = "consul"
-  chart     = "${path.module}/helm-charts/consul-helm"
+  chart     = "${path.module}/helm-charts/consul-helm-gateways"
   namespace = "default"
 
   set {
