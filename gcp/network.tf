@@ -75,24 +75,25 @@ resource "google_compute_url_map" "frontend" {
         path_matcher = "nomad"
     }
 
-    host_rule {
-        hosts        = ["consul.google.demo.gs"]
-        path_matcher = "consul"
-    }
-
-    host_rule {
-        hosts        = ["prometheus.google.demo.gs"]
-        path_matcher = "prometheus"
-    }
-
     path_matcher {
         name            = "nomad"
         default_service = "${google_compute_backend_service.nomad.self_link}"
     }
 
+
+    host_rule {
+        hosts        = ["consul.google.demo.gs"]
+        path_matcher = "consul"
+    }
+
     path_matcher {
         name            = "consul"
         default_service = "${google_compute_backend_service.consul.self_link}"
+    }
+
+    host_rule {
+        hosts        = ["prometheus.google.demo.gs"]
+        path_matcher = "prometheus"
     }
 
     path_matcher {

@@ -313,4 +313,108 @@ scrape_configs:
       }
     }
   }
+
+  group "gateways" {
+    count = 1
+
+    constraint {
+      operator  = "distinct_hosts"
+      value     = "true"
+    }
+
+    task "gateway" {
+      driver = "exec"
+
+      config {
+        command = "consul"
+        args    = [
+          "connect", "envoy",
+          "-register",
+          "-mesh-gateway",
+          "-address", "${NOMAD_ADDR_gateway_ingress}",
+          "-service", "gateway-${NOMAD_ALLOC_ID}",
+          "-wan-address", ""
+        ]
+      }
+
+      env {
+        PATH="${PATH}:${NOMAD_TASK_DIR}"
+      }
+
+      resources {
+        network {
+          port "ingress" {}
+          port "metrics" {}
+        }
+      }
+    }
+
+    task "register" {
+      driver = "exec"
+      kill_timeout = "10s"
+
+      config {
+        command = "bash"
+        args = [
+          "local/init.sh"
+        ]
+      }
+
+      env {
+        PATH="${PATH}:${NOMAD_TASK_DIR}"
+      }
+
+      template {
+        data = <<EOH
+        {
+          "services": [{
+            "name": "downstream",
+            "ID": "downstream-{{ env "NOMAD_ALLOC_ID" }}",
+            "port": {{ env "NOMAD_PORT_postie_http" }},
+            "connect": {
+              "sidecar_service": {
+                "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
+                "proxy": {
+                  "local_service_address": "127.0.0.1",
+                  "config": {
+                    "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
+                  },
+                  "upstreams": [{
+                    "destination_name": "upstream",
+                    "local_bind_address": "127.0.0.1",
+                    "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
+                  }]
+                }
+              }
+            }
+          },
+          {
+            "name": "metrics",
+            "ID": "metrics-{{ env "NOMAD_ALLOC_ID" }}",
+            "port": {{ env "NOMAD_PORT_sidecar_metrics" }}
+          }]
+        }
+        EOH
+        destination = "local/service.json"
+      }
+
+      template {
+        data = <<EOH
+        #!/bin/bash
+        set -x
+        consul services register local/service.json
+        trap "consul services deregister local/service.json" INT
+        tail -f /dev/null &
+        PID=$!
+        wait $PID
+        EOH
+
+        destination = "local/init.sh"
+      }
+
+      resources {
+        memory = 100
+      }
+    }
+  }
 }
