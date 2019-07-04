@@ -31,7 +31,7 @@ resource "dnsimple_record" "google_consul" {
   name   = "consul.google"
   type   = "A"
   ttl    = 3600
-  value  = module.nomad_gcp.loadbalancer_consul
+  value  = module.nomad_gcp.loadbalancer_server
 }
 
 resource "dnsimple_record" "google_nomad" {
@@ -39,7 +39,7 @@ resource "dnsimple_record" "google_nomad" {
   name   = "nomad.google"
   type   = "A"
   ttl    = 3600
-  value  = module.nomad_gcp.loadbalancer_nomad
+  value  = module.nomad_gcp.loadbalancer_server
 }
 
 resource "dnsimple_record" "google_prometheus" {
@@ -47,5 +47,5 @@ resource "dnsimple_record" "google_prometheus" {
   name   = "prometheus.google"
   type   = "A"
   ttl    = 3600
-  value  = module.nomad_gcp.loadbalancer_prometheus
+  value  = module.nomad_gcp.loadbalancer_server
 }
