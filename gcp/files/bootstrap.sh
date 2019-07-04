@@ -37,6 +37,7 @@ config_entries {
 server = true
 bootstrap_expect = 3
 retry_join = ["provider=gce tag_value=server"]
+retry_join_wan = ["consul.azure.demo.gs"]
 
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
@@ -61,6 +62,12 @@ cat <<EOF > /etc/nomad.d/server.hcl
 log_level = "DEBUG"
 data_dir = "/tmp/nomad"
 datacenter = "google"
+
+telemetry {
+  publish_allocation_metrics = true
+  publish_node_metrics = true
+  prometheus_metrics = true
+}
 
 server {
   enabled = true
