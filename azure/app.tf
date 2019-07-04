@@ -21,7 +21,7 @@ resource "kubernetes_deployment" "web" {
       metadata {
         labels = {
           app     = "web"
-          version = "v0.1.7"
+          version = "v0.1.8"
         }
 
         annotations = {
@@ -89,7 +89,7 @@ resource "kubernetes_deployment" "api" {
       metadata {
         labels = {
           app     = "api"
-          version = "v0.1.7"
+          version = "v0.1.8"
         }
 
         annotations = {
