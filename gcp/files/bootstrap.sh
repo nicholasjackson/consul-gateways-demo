@@ -42,6 +42,7 @@ retry_join_wan = ["consul.azure.demo.gs"]
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
 advertise_addr = "$IP"
+advertise_addr_wan = "{{ GetPublicInterfaces | sort \"default\" | join \"name\" \" \" }}"
 
 ports {
   grpc = 8502
