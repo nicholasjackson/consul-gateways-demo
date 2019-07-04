@@ -66,13 +66,13 @@ resource "kubernetes_deployment" "downstream" {
   }
 }
 
-resource "kubernetes_deployment" "upstream" {
+resource "kubernetes_deployment" "api" {
   depends_on = [helm_release.consul]
 
   metadata {
-    name = "upstream"
+    name = "api"
     labels = {
-      app = "upstream"
+      app = "api"
     }
   }
 
@@ -81,14 +81,14 @@ resource "kubernetes_deployment" "upstream" {
 
     selector {
       match_labels = {
-        app = "upstream"
+        app = "api"
       }
     }
 
     template {
       metadata {
         labels = {
-          app     = "upstream"
+          app     = "api"
           version = "v0.1.7"
         }
 
