@@ -52,6 +52,10 @@ scrape_configs:
   - source_labels: ['__meta_consul_service']
     regex: 'nomad-client|nomad'
     action: drop
+  - source_labels: ['__meta_consul_tags']
+    regex: '.*v(1|2).*'
+    replacement: '${1}'
+    target_label: version
 - job_name: nomad
   scrape_interval: 10s
   consul_sd_configs:

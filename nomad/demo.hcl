@@ -89,6 +89,7 @@ job "demo" {
             "meta": {
               "version": "1"
             },
+            "tags":["v1"],
             "connect": {
               "sidecar_service": {
                 "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
@@ -105,7 +106,8 @@ job "demo" {
           {
             "name": "metrics",
             "ID": "metrics-{{ env "NOMAD_ALLOC_ID" }}",
-            "port": {{ env "NOMAD_PORT_sidecar_metrics" }}
+            "port": {{ env "NOMAD_PORT_sidecar_metrics" }},
+            "tags":["v1"]
           }]
         }
         EOH
