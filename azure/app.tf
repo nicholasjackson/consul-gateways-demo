@@ -1,5 +1,5 @@
 resource "kubernetes_deployment" "downstream" {
-  // depends_on = [helm_release.consul]
+  depends_on = [helm_release.consul]
 
   metadata {
     name = "downstream"
@@ -21,7 +21,7 @@ resource "kubernetes_deployment" "downstream" {
       metadata {
         labels = {
           app     = "downstream"
-          version = "v0.1.6"
+          version = "v0.1.7"
         }
 
         annotations = {
@@ -67,7 +67,7 @@ resource "kubernetes_deployment" "downstream" {
 }
 
 resource "kubernetes_deployment" "upstream" {
-  // depends_on = [helm_release.consul]
+  depends_on = [helm_release.consul]
 
   metadata {
     name = "upstream"
@@ -77,7 +77,7 @@ resource "kubernetes_deployment" "upstream" {
   }
 
   spec {
-    replicas = 0
+    replicas = 3
 
     selector {
       match_labels = {
@@ -89,7 +89,7 @@ resource "kubernetes_deployment" "upstream" {
       metadata {
         labels = {
           app     = "upstream"
-          version = "v0.1.5"
+          version = "v0.1.7"
         }
 
         annotations = {

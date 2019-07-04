@@ -126,22 +126,6 @@ spec:
             {{- if .Values.meshGateway.consulServiceName }}
             -service={{ .Values.meshGateway.consulServiceName | quote }} \
             {{- end }}
-        livenessProbe:
-          tcpSocket:
-            port: {{ .Values.meshGateway.containerPort }}
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
-        readinessProbe:
-          tcpSocket:
-            port: {{ .Values.meshGateway.containerPort }}
-          failureThreshold: 3
-          initialDelaySeconds: 10
-          periodSeconds: 10
-          successThreshold: 1
-          timeoutSeconds: 5
         ports:
         - name: gateway
           containerPort: {{ .Values.meshGateway.containerPort }}
