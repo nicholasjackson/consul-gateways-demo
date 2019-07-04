@@ -11,7 +11,7 @@ variable "instance-zone" {
 }
 
 variable "instance-type" {
-    default = "g1-small"
+    default = "n1-standard-1"
 }
 
 variable "instance-count" {
