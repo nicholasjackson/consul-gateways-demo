@@ -111,3 +111,22 @@ resource "kubernetes_service" "consul" {
     type = "LoadBalancer"
   }
 }
+
+resource "kubernetes_service" "gateways" {
+  metadata {
+    name = "gateways"
+  }
+  spec {
+    selector = {
+      app       = "consul"
+      component = "mesh-gateway"
+    }
+
+    port {
+      port        = 443
+      target_port = 443
+    }
+
+    type = "LoadBalancer"
+  }
+}

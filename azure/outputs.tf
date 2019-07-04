@@ -10,6 +10,10 @@ output "loadbalancer_consul" {
   value = kubernetes_service.consul.load_balancer_ingress.0.ip
 }
 
+output "loadbalancer_gateway" {
+  value = kubernetes_service.consul.load_balancer_ingress.0.ip
+}
+
 output "grafana_password" {
   value = data.kubernetes_secret.grafana.data.admin-password
 }
