@@ -76,4 +76,19 @@ resource "helm_release" "consul" {
     name  = "connectInject.imageEnvoy"
     value = "envoyproxy/envoy:v1.10.0"
   }
+
+  set {
+    name  = "meshGateway.enabled"
+    value = true
+  }
+
+  set {
+    name  = "meshGateway.enabled"
+    value = true
+  }
+
+  set {
+    name  = "meshGateway.imageEnvoy"
+    value = "envoyproxy/envoy:v1.10.0"
+  }
 }

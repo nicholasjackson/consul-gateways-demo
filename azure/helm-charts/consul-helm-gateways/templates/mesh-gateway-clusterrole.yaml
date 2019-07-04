@@ -1,0 +1,24 @@
+{{- if .Values.meshGateway.enabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: {{ template "consul.fullname" . }}-mesh-gateway
+  labels:
+    app: {{ template "consul.name" . }}
+    chart: {{ template "consul.chart" . }}
+    heritage: {{ .Release.Service }}
+    release: {{ .Release.Name }}
+    component: mesh-gateway
+{{- if .Values.global.bootstrapACLs }}
+rules:
+- apiGroups: [""]
+  resources:
+    - secrets
+  resourceNames:
+    - {{ .Release.Name }}-consul-mesh-gateway-acl-token
+  verbs:
+    - get
+{{- else }}
+rules: []
+{{- end }}
+{{- end }}
