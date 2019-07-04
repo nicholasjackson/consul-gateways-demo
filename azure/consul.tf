@@ -88,17 +88,17 @@ provider "helm" {
 //   }
 
 //   set {
-    name  = "meshGateway.mode"
-    value = "local"
-  }
+//    name  = "meshGateway.mode"
+//    value = "local"
+//  }
 
-  set {
+//  set {
 //     name  = "meshGateway.imageEnvoy"
 //     value = "envoyproxy/envoy:v1.10.0"
 //   }
 
-  set {
-    name  = "meshGateway.service.enabled"
-    value = true
-  }
+//  set {
+//    name  = "meshGateway.service.enabled"
+//    value = true
+//  }
 // }
