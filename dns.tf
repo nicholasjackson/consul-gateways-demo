@@ -25,3 +25,27 @@ resource "dnsimple_record" "google" {
   ttl    = 3600
   value  = module.nomad_gcp.loadbalancer_server
 }
+
+resource "dnsimple_record" "google_consul" {
+  domain = "demo.gs"
+  name   = "consul.google"
+  type   = "A"
+  ttl    = 3600
+  value  = module.nomad_gcp.loadbalancer_server
+}
+
+resource "dnsimple_record" "google_nomad" {
+  domain = "demo.gs"
+  name   = "nomad.google"
+  type   = "A"
+  ttl    = 3600
+  value  = module.nomad_gcp.loadbalancer_server
+}
+
+resource "dnsimple_record" "google_prometheus" {
+  domain = "demo.gs"
+  name   = "prometheus.google"
+  type   = "A"
+  ttl    = 3600
+  value  = module.nomad_gcp.loadbalancer_server
+}

@@ -5,28 +5,26 @@ resource "google_compute_instance_group_manager" "server" {
   base_instance_name = "server"
   zone               = "${var.instance-zone}"
   target_size        = "${var.instance-count}"
-  target_pools       = [
-    "${google_compute_target_pool.server.self_link}", 
-    "${google_compute_target_pool.nomad.self_link}", 
-    "${google_compute_target_pool.consul.self_link}", 
-    "${google_compute_target_pool.prometheus.self_link}"
-  ]
-}
+  target_pools       = ["${google_compute_target_pool.consul.self_link}"]
 
-resource "google_compute_target_pool" "server" {
-  name = "server-target-pool"
-}
+  named_port {
+    name = "nomad"
+    port = 4646
+  }
 
-resource "google_compute_target_pool" "nomad" {
-  name = "nomad-target-pool"
+  named_port {
+    name = "consul"
+    port = 8500
+  }
+
+  named_port {
+    name = "prometheus"
+    port = 9090
+  }
 }
 
 resource "google_compute_target_pool" "consul" {
-  name = "consul-target-pool"
-}
-
-resource "google_compute_target_pool" "prometheus" {
-  name = "prometheus-target-pool"
+  name = "consul"
 }
 
 // The instance template for the Nomad servers.
