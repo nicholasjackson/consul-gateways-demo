@@ -1,5 +1,5 @@
 resource "kubernetes_deployment" "downstream" {
-  depends_on = [helm_release.consul]
+  // depends_on = [helm_release.consul]
 
   metadata {
     name = "downstream"
@@ -67,7 +67,7 @@ resource "kubernetes_deployment" "downstream" {
 }
 
 resource "kubernetes_deployment" "upstream" {
-  depends_on = [helm_release.consul]
+  // depends_on = [helm_release.consul]
 
   metadata {
     name = "upstream"
@@ -134,7 +134,7 @@ resource "kubernetes_deployment" "upstream" {
 }
 
 resource "kubernetes_deployment" "httperf" {
-  depends_on = [helm_release.consul]
+  // depends_on = [helm_release.consul]
 
   metadata {
     name = "httperf"

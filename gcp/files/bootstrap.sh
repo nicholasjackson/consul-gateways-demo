@@ -1,5 +1,6 @@
 #!/bin/bash
 IP=$(getent ahosts $HOSTNAME | head -n 1 | cut -d ' ' -f 1)
+WAN_IP=$(curl -H "Metadata-Flavor: Google" http://metadata/computeMetadata/v1/instance/network-interfaces/0/access-configs/0/external-ip)
 
 # Set up credential helpers for Google Container Registry.
 mkdir -p /etc/docker
@@ -42,6 +43,7 @@ retry_join_wan = ["consul.azure.demo.gs"]
 bind_addr = "0.0.0.0"
 client_addr = "0.0.0.0"
 advertise_addr = "$IP"
+advertise_addr_wan = "$WAN_IP"
 
 ports {
   grpc = 8502

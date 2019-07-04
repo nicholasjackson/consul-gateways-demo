@@ -75,24 +75,25 @@ resource "google_compute_url_map" "frontend" {
         path_matcher = "nomad"
     }
 
-    host_rule {
-        hosts        = ["consul.google.demo.gs"]
-        path_matcher = "consul"
-    }
-
-    host_rule {
-        hosts        = ["prometheus.google.demo.gs"]
-        path_matcher = "prometheus"
-    }
-
     path_matcher {
         name            = "nomad"
         default_service = "${google_compute_backend_service.nomad.self_link}"
     }
 
+
+    host_rule {
+        hosts        = ["consul.google.demo.gs"]
+        path_matcher = "consul"
+    }
+
     path_matcher {
         name            = "consul"
         default_service = "${google_compute_backend_service.consul.self_link}"
+    }
+
+    host_rule {
+        hosts        = ["prometheus.google.demo.gs"]
+        path_matcher = "prometheus"
     }
 
     path_matcher {
@@ -111,4 +112,15 @@ resource "google_compute_global_forwarding_rule" "frontend" {
   target     = "${google_compute_target_http_proxy.frontend.self_link}"
   port_range = "80"
   ip_address = "${google_compute_global_address.frontend.address}"
+}
+
+resource "google_compute_address" "gateway" {
+  name = "gateway-ip"
+}
+
+resource "google_compute_forwarding_rule" "gateway" {
+  name       = "gateway"
+  target     = "${google_compute_target_pool.gateway.self_link}"
+  port_range = "1-65535"
+  ip_address = "${google_compute_address.gateway.address}"
 }

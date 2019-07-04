@@ -13,3 +13,7 @@ output "loadbalancer_consul" {
 output "grafana_password" {
   value = module.k8s_azure.grafana_password
 }
+
+output "loadbalancer_gateway" {
+  value = module.nomad_gcp.loadbalancer_gateway
+}
