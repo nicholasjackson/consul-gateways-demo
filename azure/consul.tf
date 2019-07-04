@@ -10,85 +10,85 @@ provider "helm" {
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v2.13.1"
 }
 
-resource "helm_release" "consul" {
-  depends_on = [kubernetes_cluster_role_binding.tiller]
+// resource "helm_release" "consul" {
+//   depends_on = [kubernetes_cluster_role_binding.tiller]
 
-  name      = "consul"
-  chart     = "${path.module}/helm-charts/consul-helm-gateways"
-  namespace = "default"
+//   name      = "consul"
+//   chart     = "${path.module}/helm-charts/consul-helm-gateways"
+//   namespace = "default"
 
-  set {
-    name  = "global.image"
-    value = "nicholasjackson/consul:beta"
-  }
+//   set {
+//     name  = "global.image"
+//     value = "nicholasjackson/consul:beta"
+//   }
 
-  set {
-    name  = "global.datacenter"
-    value = "azure"
-  }
+//   set {
+//     name  = "global.datacenter"
+//     value = "azure"
+//   }
 
-  set {
-    name  = "server.replicas"
-    value = 1
-  }
+//   set {
+//     name  = "server.replicas"
+//     value = 1
+//   }
 
-  set {
-    name  = "server.bootstrapExpect"
-    value = 1
-  }
+//   set {
+//     name  = "server.bootstrapExpect"
+//     value = 1
+//   }
 
-  set {
-    name  = "client.grpc"
-    value = true
-  }
+//   set {
+//     name  = "client.grpc"
+//     value = true
+//   }
 
-  set {
-    name  = "connectInject.enabled"
-    value = true
-  }
+//   set {
+//     name  = "connectInject.enabled"
+//     value = true
+//   }
 
-  set {
-    name  = "centralConfig.enabled"
-    value = true
-  }
+//   set {
+//     name  = "centralConfig.enabled"
+//     value = true
+//   }
 
-  set {
-    name  = "server.extraConfig"
-    value = "\"{\\\"advertise_addr_wan\\\": \\\"${kubernetes_service.consul.load_balancer_ingress.0.ip}\\\"}\""
-  }
+//   set {
+//     name  = "server.extraConfig"
+//     value = "\"{\\\"advertise_addr_wan\\\": \\\"${kubernetes_service.consul.load_balancer_ingress.0.ip}\\\"}\""
+//   }
 
-  set {
-    name  = "connectInject.centralConfig.enabled"
-    value = true
-  }
+//   set {
+//     name  = "connectInject.centralConfig.enabled"
+//     value = true
+//   }
 
-  set {
-    name  = "connectInject.centralConfig.defaultProtocol"
-    value = "http"
-  }
+//   set {
+//     name  = "connectInject.centralConfig.defaultProtocol"
+//     value = "http"
+//   }
 
-  set {
-    name  = "connectInject.centralConfig.proxyDefaults"
-    value = "\"{\\\"envoy_prometheus_bind_addr\\\": \\\"0.0.0.0:9102\\\"}\""
-  }
+//   set {
+//     name  = "connectInject.centralConfig.proxyDefaults"
+//     value = "\"{\\\"envoy_prometheus_bind_addr\\\": \\\"0.0.0.0:9102\\\"}\""
+//   }
 
-  set {
-    name  = "connectInject.imageEnvoy"
-    value = "envoyproxy/envoy:v1.10.0"
-  }
+//   set {
+//     name  = "connectInject.imageEnvoy"
+//     value = "envoyproxy/envoy:v1.10.0"
+//   }
 
-  set {
-    name  = "meshGateway.enabled"
-    value = true
-  }
+//   set {
+//     name  = "meshGateway.enabled"
+//     value = true
+//   }
 
-  set {
-    name  = "meshGateway.enabled"
-    value = true
-  }
+//   set {
+//     name  = "meshGateway.enabled"
+//     value = true
+//   }
 
-  set {
-    name  = "meshGateway.imageEnvoy"
-    value = "envoyproxy/envoy:v1.10.0"
-  }
-}
+//   set {
+//     name  = "meshGateway.imageEnvoy"
+//     value = "envoyproxy/envoy:v1.10.0"
+//   }
+// }
