@@ -112,33 +112,3 @@ resource "google_compute_global_forwarding_rule" "frontend" {
   port_range = "80"
   ip_address = "${google_compute_global_address.frontend.address}"
 }
-
-// resource "google_compute_global_forwarding_rule" "consul-federation" {
-//   name       = "consul-federation"
-//   target     = "${google_compute_target_pool.consul.self_link}"
-//   port_range = "8300-8302"
-//   ip_address = "${google_compute_global_address.frontend.address}"
-// }
-
-// resource "google_compute_target_tcp_proxy" "consul-federation" {
-//   name            = "consul-federation"
-//   backend_service = "${google_compute_backend_service.consul-federation.self_link}"
-// }
-
-// resource "google_compute_backend_service" "consul-federation" {
-//   name          = "consul-federation"
-//   protocol      = "TCP"
-//   timeout_sec   = 10
-
-//   health_checks = ["${google_compute_health_check.consul-federation.self_link}"]
-// }
-
-// resource "google_compute_health_check" "consul-federation" {
-//   name               = "consul-federation"
-//   timeout_sec        = 10
-//   check_interval_sec = 10
-
-//   tcp_health_check {
-//     port = "8300"
-//   }
-// }

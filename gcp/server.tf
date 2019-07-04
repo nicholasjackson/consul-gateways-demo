@@ -5,7 +5,6 @@ resource "google_compute_instance_group_manager" "server" {
   base_instance_name = "server"
   zone               = "${var.instance-zone}"
   target_size        = "${var.instance-count}"
-  target_pools       = ["${google_compute_target_pool.consul.self_link}"]
 
   named_port {
     name = "nomad"
@@ -21,10 +20,6 @@ resource "google_compute_instance_group_manager" "server" {
     name = "prometheus"
     port = 9090
   }
-}
-
-resource "google_compute_target_pool" "consul" {
-  name = "consul"
 }
 
 // The instance template for the Nomad servers.
