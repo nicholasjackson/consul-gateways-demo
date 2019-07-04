@@ -27,7 +27,7 @@ resource "kubernetes_deployment" "downstream" {
         annotations = {
           "consul.hashicorp.com/connect-inject"            = "true"
           "consul.hashicorp.com/connect-service-protocol"  = "http"
-          "consul.hashicorp.com/connect-service-upstreams" = "upstream:9001"
+          "consul.hashicorp.com/connect-service-upstreams" = "upstream:9001:google"
           "prometheus.io/scrape" : "true"
           "prometheus.io/port" : "9102"
         }
@@ -77,7 +77,7 @@ resource "kubernetes_deployment" "upstream" {
   }
 
   spec {
-    replicas = 3
+    replicas = 0
 
     selector {
       match_labels = {

@@ -88,7 +88,17 @@ resource "helm_release" "consul" {
   }
 
   set {
+    name  = "meshGateway.mode"
+    value = "local"
+  }
+
+  set {
     name  = "meshGateway.imageEnvoy"
     value = "envoyproxy/envoy:v1.10.0"
+  }
+
+  set {
+    name  = "meshGateway.service.enabled"
+    value = true
   }
 }
