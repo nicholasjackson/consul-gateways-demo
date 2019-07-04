@@ -1,10 +1,10 @@
-resource "kubernetes_deployment" "downstream" {
+resource "kubernetes_deployment" "web" {
   depends_on = [helm_release.consul]
 
   metadata {
-    name = "downstream"
+    name = "web"
     labels = {
-      app = "downstream"
+      app = "web"
     }
   }
 
@@ -13,14 +13,14 @@ resource "kubernetes_deployment" "downstream" {
 
     selector {
       match_labels = {
-        app = "downstream"
+        app = "web"
       }
     }
 
     template {
       metadata {
         labels = {
-          app     = "downstream"
+          app     = "web"
           version = "v0.1.7"
         }
 
@@ -191,13 +191,13 @@ resource "kubernetes_deployment" "httperf" {
   }
 }
 
-resource "kubernetes_service" "downstream" {
+resource "kubernetes_service" "web" {
   metadata {
-    name = "downstream-lb"
+    name = "web-lb"
   }
   spec {
     selector = {
-      app = kubernetes_deployment.downstream.metadata.0.labels.app
+      app = kubernetes_deployment.web.metadata.0.labels.app
     }
 
     port {
