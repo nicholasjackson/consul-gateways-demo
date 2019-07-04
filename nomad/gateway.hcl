@@ -26,8 +26,10 @@ job "gateway" {
             "connect", "envoy",
             "-mesh-gateway",
             "-register",
-            "-address", "${NOMAD_ADDR_ingress}",
-            "-wan-address", "35.233.51.3:443"
+            "-address", ":20443",
+            "-wan-address", "35.233.51.3:20443",
+            "--",
+            "-l", "debug"
             ]
         }
 

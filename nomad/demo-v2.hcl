@@ -1,4 +1,4 @@
-job "demo" {
+job "demo-v2" {
   datacenters = ["google"]
 
   type = "service"
@@ -9,7 +9,7 @@ job "demo" {
     healthy_deadline = "3m"
   }
 
-  group "api" {
+  group "upstream" {
     count = 1
 
     constraint {
@@ -46,7 +46,7 @@ job "demo" {
         command = "consul"
         args    = [
           "connect", "envoy",
-          "-sidecar-for", "api-${NOMAD_ALLOC_ID}",
+          "-sidecar-for", "upstream-${NOMAD_ALLOC_ID}",
           "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
         ]
       }
@@ -83,11 +83,11 @@ job "demo" {
         data = <<EOH
         {
           "services": [{
-            "name": "api",
-            "ID": "api-{{ env "NOMAD_ALLOC_ID" }}",
+            "name": "upstream",
+            "ID": "upstream-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
             "meta": {
-              "version": "1"
+              "version": "2"
             },
             "connect": {
               "sidecar_service": {
@@ -95,7 +95,6 @@ job "demo" {
                 "proxy": {
                   "local_service_address": "127.0.0.1",
                   "config": {
-                    "protocol": "http",
                     "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
                   }
                 }
@@ -132,7 +131,7 @@ job "demo" {
     }
   }
 
-  group "web" {
+  group "downstream" {
     count = 1
 
     constraint {
@@ -157,9 +156,7 @@ job "demo" {
 
         network {
           mbits = 10
-          port "http" {
-            static = 9000
-          }
+          port "http" {}
         }
       }
     }
@@ -171,7 +168,7 @@ job "demo" {
         command = "consul"
         args    = [
           "connect", "envoy",
-          "-sidecar-for", "web-${NOMAD_ALLOC_ID}",
+          "-sidecar-for", "downstream-${NOMAD_ALLOC_ID}",
           "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
         ]
       }
@@ -209,11 +206,11 @@ job "demo" {
         data = <<EOH
         {
           "services": [{
-            "name": "web",
-            "ID": "web-{{ env "NOMAD_ALLOC_ID" }}",
+            "name": "downstream",
+            "ID": "downstream-{{ env "NOMAD_ALLOC_ID" }}",
             "port": {{ env "NOMAD_PORT_postie_http" }},
             "meta": {
-              "version": "1"
+              "version": "2"
             },
             "connect": {
               "sidecar_service": {
@@ -221,11 +218,10 @@ job "demo" {
                 "proxy": {
                   "local_service_address": "127.0.0.1",
                   "config": {
-                    "protocol": "http",
                     "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
                   },
                   "upstreams": [{
-                    "destination_name": "api",
+                    "destination_name": "upstream",
                     "local_bind_address": "127.0.0.1",
                     "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
                   }]
