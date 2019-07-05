@@ -17,12 +17,21 @@ resource "dnsimple_record" "consul" {
   ttl    = 3600
   value  = module.k8s_azure.loadbalancer_consul
 }
+
 resource "dnsimple_record" "consul_gateway" {
   domain = "demo.gs"
   name   = "gateway.azure"
   type   = "A"
   ttl    = 3600
   value  = module.k8s_azure.loadbalancer_gateway
+}
+
+resource "dnsimple_record" "kubernetes_dash" {
+  domain = "demo.gs"
+  name   = "k8s.azure"
+  type   = "A"
+  ttl    = 3600
+  value  = module.k8s_azure.loadbalancer_kubernetes
 }
 
 resource "dnsimple_record" "google" {

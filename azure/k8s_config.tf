@@ -114,7 +114,7 @@ resource "kubernetes_service" "consul" {
 
 resource "kubernetes_service" "kubernetes" {
   metadata {
-    name = "kubernetes"
+    name = "kubernetes-dash"
   }
   spec {
     selector = {
