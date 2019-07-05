@@ -112,6 +112,24 @@ resource "kubernetes_service" "consul" {
   }
 }
 
+resource "kubernetes_service" "kubernetes" {
+  metadata {
+    name = "kubernetes"
+  }
+  spec {
+    selector = {
+      k8s-app = "kubernetes-dashboard"
+    }
+
+    port {
+      port        = 443
+      target_port = 9090
+    }
+
+    type = "LoadBalancer"
+  }
+}
+
 resource "kubernetes_service" "gateways" {
   metadata {
     name = "gateways"

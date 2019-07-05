@@ -36,7 +36,7 @@ resource "kubernetes_deployment" "web" {
       spec {
         container {
           image = "nicholasjackson/postie:latest"
-          name  = "downstream"
+          name  = "web"
 
           command = ["postie"]
           args = [
@@ -103,7 +103,7 @@ resource "kubernetes_deployment" "api" {
       spec {
         container {
           image = "nicholasjackson/postie:latest"
-          name  = "upstream"
+          name  = "api"
 
           command = ["postie"]
           args = [
@@ -144,7 +144,7 @@ resource "kubernetes_deployment" "httperf" {
   }
 
   spec {
-    replicas = 0
+    replicas = 1
 
     selector {
       match_labels = {
