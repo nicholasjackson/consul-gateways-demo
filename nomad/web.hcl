@@ -13,58 +13,58 @@ job "web" {
         count = 1
 
         constraint {
-        operator  = "distinct_hosts"
-        value     = "true"
+            operator  = "distinct_hosts"
+            value     = "true"
         }
 
         task "postie" {
-        driver = "exec"
+            driver = "exec"
 
-        config {
-            command = "postie"
-            args = [
-            "--bind-address=127.0.0.1:${NOMAD_PORT_http}",
-            "--upstream-uri=http://127.0.0.1:${NOMAD_PORT_sidecar_upstream}"
-            ]
-        }
-
-        resources {
-            cpu    = 100
-            memory = 256
-
-            network {
-            mbits = 10
-            port "http" {
-                static = 9000
+            config {
+                command = "postie"
+                args = [
+                    "--bind-address=127.0.0.1:${NOMAD_PORT_http}",
+                    "--upstream-uri=http://127.0.0.1:${NOMAD_PORT_sidecar_upstream}"
+                ]
             }
+
+            resources {
+                cpu    = 100
+                memory = 256
+
+                network {
+                    mbits = 10
+                    port "http" {
+                        static = 9000
+                    }
+                }
             }
-        }
         }
 
         task "sidecar" {
-        driver = "exec"
+            driver = "exec"
 
-        config {
-            command = "consul"
-            args    = [
-            "connect", "envoy",
-            "-sidecar-for", "web-${NOMAD_ALLOC_ID}",
-            "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
-            ]
-        }
-
-        env {
-            PATH="${PATH}:${NOMAD_TASK_DIR}"
-        }
-
-        resources {
-            network {
-            port "ingress" {}
-            port "upstream" {}
-            port "envoyadmin" {}
-            port "metrics" {}
+            config {
+                command = "consul"
+                args    = [
+                    "connect", "envoy",
+                    "-sidecar-for", "web-${NOMAD_ALLOC_ID}",
+                    "-admin-bind", "127.0.0.1:${NOMAD_PORT_envoyadmin}"
+                ]
             }
-        }
+
+            env {
+                PATH="${PATH}:${NOMAD_TASK_DIR}"
+            }
+
+            resources {
+                network {
+                    port "ingress" {}
+                    port "upstream" {}
+                    port "envoyadmin" {}
+                    port "metrics" {}
+                }
+            }
         }
 
         task "register" {
@@ -74,7 +74,7 @@ job "web" {
             config {
                 command = "bash"
                 args = [
-                "local/init.sh"
+                    "local/init.sh"
                 ]
             }
 
@@ -85,36 +85,36 @@ job "web" {
             template {
                 data = <<EOH
                 {
-                "services": [{
-                    "name": "web",
-                    "ID": "web-{{ env "NOMAD_ALLOC_ID" }}",
-                    "port": {{ env "NOMAD_PORT_postie_http" }},
-                    "meta": {
-                    "version": "1"
-                    },
-                    "connect": {
-                    "sidecar_service": {
-                        "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
-                        "proxy": {
-                        "local_service_address": "127.0.0.1",
-                        "config": {
-                            "protocol": "http",
-                            "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
+                    "services": [{
+                        "name": "web",
+                        "ID": "web-{{ env "NOMAD_ALLOC_ID" }}",
+                        "port": {{ env "NOMAD_PORT_postie_http" }},
+                        "meta": {
+                        "version": "1"
                         },
-                        "upstreams": [{
-                            "destination_name": "api",
-                            "local_bind_address": "127.0.0.1",
-                            "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
-                        }]
+                        "connect": {
+                        "sidecar_service": {
+                            "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
+                            "proxy": {
+                            "local_service_address": "127.0.0.1",
+                            "config": {
+                                "protocol": "http",
+                                "envoy_prometheus_bind_addr": "0.0.0.0:{{ env "NOMAD_PORT_sidecar_metrics" }}"
+                            },
+                            "upstreams": [{
+                                "destination_name": "api",
+                                "local_bind_address": "127.0.0.1",
+                                "local_bind_port": {{ env "NOMAD_PORT_sidecar_upstream" }}
+                            }]
+                            }
                         }
-                    }
-                    }
-                },
-                {
-                    "name": "metrics",
-                    "ID": "metrics-{{ env "NOMAD_ALLOC_ID" }}",
-                    "port": {{ env "NOMAD_PORT_sidecar_metrics" }}
-                }]
+                        }
+                    },
+                    {
+                        "name": "metrics",
+                        "ID": "metrics-{{ env "NOMAD_ALLOC_ID" }}",
+                        "port": {{ env "NOMAD_PORT_sidecar_metrics" }}
+                    }]
                 }
                 EOH
                 destination = "local/service.json"
