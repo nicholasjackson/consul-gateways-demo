@@ -9,7 +9,7 @@ resource "kubernetes_deployment" "web" {
   }
 
   spec {
-    replicas = 3
+    replicas = 1
 
     selector {
       match_labels = {
@@ -21,13 +21,13 @@ resource "kubernetes_deployment" "web" {
       metadata {
         labels = {
           app     = "web"
-          version = "v0.1.8"
+          version = "v0.1.10"
         }
 
         annotations = {
           "consul.hashicorp.com/connect-inject"            = "true"
           "consul.hashicorp.com/connect-service-protocol"  = "http"
-          "consul.hashicorp.com/connect-service-upstreams" = "web:9001:google"
+          "consul.hashicorp.com/connect-service-upstreams" = "api:9001"
           "prometheus.io/scrape" : "true"
           "prometheus.io/port" : "9102"
         }
@@ -77,7 +77,7 @@ resource "kubernetes_deployment" "api" {
   }
 
   spec {
-    replicas = 3
+    replicas = 0
 
     selector {
       match_labels = {
