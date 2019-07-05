@@ -88,8 +88,13 @@ resource "helm_release" "consul" {
   }
 
   set {
+    name  = "meshGateway.wanAddress.useNodeIP"
+    value = false
+  }
+
+  set {
     name  = "meshGateway.wanAddress.host"
-    value = "gateway.azure.demo.gs"
+    value = "${kubernetes_service.gateways.load_balancer_ingress.0.ip}"
   }
 
   set {
