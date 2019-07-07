@@ -17,3 +17,7 @@ output "grafana_password" {
 output "loadbalancer_gateway" {
   value = module.nomad_gcp.loadbalancer_gateway
 }
+
+output "loadbalancer_kubernetes" {
+  value = module.k8s_azure.loadbalancer_kubernetes
+}

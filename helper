@@ -40,7 +40,7 @@ function open_service {
 case "$1" in
   dashboard)
     get_service_token
-    open_service 8443 443 kubernetes-dashboard https kube-system
+    open_service 8443 80 kubernetes-dashboard http kube-system
     ;;
   consul)
     open_service 8180 80 consul-consul-ui http default

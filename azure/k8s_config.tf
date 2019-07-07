@@ -112,9 +112,11 @@ resource "kubernetes_service" "consul" {
   }
 }
 
+/*
 resource "kubernetes_service" "kubernetes" {
   metadata {
-    name = "kubernetes-dash"
+    name      = "kubernetes-dash"
+    namespace = "kube-system"
   }
   spec {
     selector = {
@@ -122,13 +124,14 @@ resource "kubernetes_service" "kubernetes" {
     }
 
     port {
-      port        = 443
-      target_port = 9090
+      port        = 80
+      target_port = "http"
     }
 
     type = "LoadBalancer"
   }
 }
+*/
 
 resource "kubernetes_service" "gateways" {
   metadata {
