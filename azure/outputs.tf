@@ -15,7 +15,8 @@ output "loadbalancer_gateway" {
 }
 
 output "loadbalancer_kubernetes" {
-  value = kubernetes_service.kubernetes.load_balancer_ingress.0.ip
+  value = "127.0.0.1"
+  //  value = kubernetes_service.kubernetes.load_balancer_ingress.0.ip
 }
 
 output "grafana_password" {
