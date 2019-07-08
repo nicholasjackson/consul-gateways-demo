@@ -1,4 +1,4 @@
-job "demo-v2" {
+job "api-v2" {
   datacenters = ["google"]
 
   type = "service"
@@ -12,19 +12,22 @@ job "demo-v2" {
   group "api" {
     count = 1
 
+    network {}
+
     constraint {
       operator  = "distinct_hosts"
       value     = "true"
     }
 
     task "postie" {
-      driver = "exec"
+      driver = "raw_exec"
 
       config {
         command = "postie"
         args = [
           "--bind-address=127.0.0.1:${NOMAD_PORT_http}",
-          "--type=upstream"
+          "--type=upstream",
+          "--upstream-rate-limit", "70"
         ]
       }
 
@@ -40,7 +43,7 @@ job "demo-v2" {
     }
 
     task "sidecar" {
-      driver = "exec"
+      driver = "raw_exec"
 
       config {
         command = "consul"
@@ -65,7 +68,7 @@ job "demo-v2" {
     }
 
     task "register" {
-      driver = "exec"
+      driver = "raw_exec"
       kill_timeout = "10s"
 
       config {

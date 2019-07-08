@@ -1,4 +1,4 @@
-job "demo" {
+job "api-v1" {
   datacenters = ["google"]
 
   type = "service"
@@ -12,13 +12,15 @@ job "demo" {
   group "api" {
     count = 1
 
+    network {}
+
     constraint {
       operator  = "distinct_hosts"
       value     = "true"
     }
 
     task "postie" {
-      driver = "exec"
+      driver = "raw_exec"
 
       config {
         command = "postie"
@@ -40,7 +42,7 @@ job "demo" {
     }
 
     task "sidecar" {
-      driver = "exec"
+      driver = "raw_exec"
 
       config {
         command = "consul"
@@ -65,7 +67,7 @@ job "demo" {
     }
 
     task "register" {
-      driver = "exec"
+      driver = "raw_exec"
       kill_timeout = "10s"
 
       config {
