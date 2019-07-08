@@ -12,13 +12,15 @@ job "gateway" {
     group "gateways" {
         count = 1
 
+        network {}
+
         constraint {
-        operator  = "distinct_hosts"
-        value     = "true"
+            attribute = "${attr.unique.hostname}"
+            value     = "server-mcln"
         }
 
         task "gateway" {
-        driver = "exec"
+        driver = "raw_exec"
 
         config {
             command = "consul"
@@ -27,7 +29,7 @@ job "gateway" {
             "-mesh-gateway",
             "-register",
             "-address", ":20443",
-            "-wan-address", "35.233.51.3:20443",
+            "-wan-address", "34.77.244.186:20443",
             "--",
             "-l", "debug"
             ]

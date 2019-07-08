@@ -12,6 +12,8 @@ job "monitoring" {
   group "monitoring" {
     count = 1
 
+    network {}
+
     task "prometheus" {
       driver = "docker"
 

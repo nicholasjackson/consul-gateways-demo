@@ -12,13 +12,15 @@ job "web" {
     group "web" {
         count = 1
 
+        network {}
+
         constraint {
             operator  = "distinct_hosts"
             value     = "true"
         }
 
         task "postie" {
-            driver = "exec"
+            driver = "raw_exec"
 
             config {
                 command = "postie"
@@ -42,7 +44,7 @@ job "web" {
         }
 
         task "sidecar" {
-            driver = "exec"
+            driver = "raw_exec"
 
             config {
                 command = "consul"
@@ -68,7 +70,7 @@ job "web" {
         }
 
         task "register" {
-            driver = "exec"
+            driver = "raw_exec"
             kill_timeout = "10s"
 
             config {
@@ -89,9 +91,6 @@ job "web" {
                         "name": "web",
                         "ID": "web-{{ env "NOMAD_ALLOC_ID" }}",
                         "port": {{ env "NOMAD_PORT_postie_http" }},
-                        "meta": {
-                        "version": "1"
-                        },
                         "connect": {
                         "sidecar_service": {
                             "port": {{ env "NOMAD_PORT_sidecar_ingress" }},
