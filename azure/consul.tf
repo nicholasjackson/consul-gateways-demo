@@ -24,7 +24,7 @@ resource "helm_release" "consul" {
 
   set {
     name  = "global.imageK8S"
-    value = "nicholasjackson/consul-k8s:beta"
+    value = "nicholasjackson/consul-k8s:dev-1"
   }
 
   set {

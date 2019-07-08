@@ -7,7 +7,5 @@
     },
     "MeshGateway": {
         "Mode": "local"
-    },
-    "CreateIndex": 4,
-    "ModifyIndex": 2008
+    }
 }

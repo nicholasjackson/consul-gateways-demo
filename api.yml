@@ -34,7 +34,7 @@ spec:
     spec:
       containers:
       - name: whack-a-pod-api
-        image: "nicholasjackson/whack-a-pod-api:latest"
+        image: "nicholasjackson/whack-a-pod-api:websocket"
         imagePullPolicy: Always
         ports:
         - containerPort: 9090

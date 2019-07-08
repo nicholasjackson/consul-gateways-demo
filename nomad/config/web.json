@@ -3,8 +3,6 @@
     "Name": "web",
     "Protocol": "http",
     "MeshGateway": {
-        "Mode": ""
+        "Mode": "local"
     },
-    "CreateIndex": 335,
-    "ModifyIndex": 335
 }
