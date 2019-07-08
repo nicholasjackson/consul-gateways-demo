@@ -21,7 +21,7 @@ resource "kubernetes_deployment" "web" {
       metadata {
         labels = {
           app     = "web"
-          version = "v0.1.10"
+          version = "v0.1.11"
         }
 
         annotations = {
@@ -78,7 +78,7 @@ resource "kubernetes_deployment" "api" {
   }
 
   spec {
-    replicas = 0
+    replicas = 1
 
     selector {
       match_labels = {
@@ -90,12 +90,13 @@ resource "kubernetes_deployment" "api" {
       metadata {
         labels = {
           app     = "api"
-          version = "v0.1.8"
+          version = "v0.1.9"
         }
 
         annotations = {
           "consul.hashicorp.com/connect-inject"           = "true"
           "consul.hashicorp.com/connect-service-protocol" = "http"
+          "consul.hashicorp.com/connect-service-tags"     = "v1"
           "prometheus.io/scrape" : "true"
           "prometheus.io/port" : "9102"
         }
