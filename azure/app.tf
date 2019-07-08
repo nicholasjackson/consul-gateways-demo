@@ -28,6 +28,7 @@ resource "kubernetes_deployment" "web" {
           "consul.hashicorp.com/connect-inject"            = "true"
           "consul.hashicorp.com/connect-service-protocol"  = "http"
           "consul.hashicorp.com/connect-service-upstreams" = "api:9001"
+          "consul.hashicorp.com/connect-service-tags"      = "v1"
           "prometheus.io/scrape" : "true"
           "prometheus.io/port" : "9102"
         }

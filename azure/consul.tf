@@ -23,6 +23,11 @@ resource "helm_release" "consul" {
   }
 
   set {
+    name  = "global.imageK8S"
+    value = "nicholasjackson/consul-k8s:beta"
+  }
+
+  set {
     name  = "global.datacenter"
     value = "azure"
   }
